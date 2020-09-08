@@ -3,6 +3,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { Link, useHistory } from "react-router-dom";
 import { Navbar, Nav } from "react-bootstrap";
 import { AppContext } from "./libs/contextLib";
+import { onError } from "./libs/errorLib"
 import { Auth } from "aws-amplify";
 import Routes from "./Routes"
 import "./App.css";
@@ -20,7 +21,7 @@ function App() {
       }
       catch (e) {
         if (e !== 'No current user') {
-          alert(e);
+          onError(e);
         }
       }
 
