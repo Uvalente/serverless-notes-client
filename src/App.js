@@ -30,7 +30,8 @@ function App() {
   }, []);
 
 
-  function handleLogout() {
+  async function handleLogout() {
+    await Auth.signOut()
     userHasAuthenticated(false);
   }
 
