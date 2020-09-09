@@ -11,3 +11,7 @@
 .Home .lander p {
   color: #999;
 }
+
+.Home .notes p.h6 {
+  margin-bottom: 0;
+}
