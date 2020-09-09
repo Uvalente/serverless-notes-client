@@ -9,3 +9,7 @@
 .App a {
   color: #333333;
 }
+
+.App .navbar {
+  margin-bottom: 15px;
+}
