@@ -5,6 +5,7 @@ import Login from "./containers/Login";
 import Signup from "./containers/Signup"
 import NewNote from "./containers/NewNote"
 import NotFound from "./containers/NotFound";
+import Note from "./containers/Note"
 
 export default function Routes() {
   return (
@@ -20,6 +21,9 @@ export default function Routes() {
       </Route>
       <Route exact path="/notes/new">
         <NewNote />
+      </Route>
+      <Route exact path="/notes/:id">
+        <Note />
       </Route>
       <Route>
         <NotFound />
