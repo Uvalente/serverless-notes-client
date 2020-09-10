@@ -55,6 +55,10 @@ export default function Note() {
     })
   }
 
+  function deleteNote() {
+    return API.del("notes", `/notes/${id}`);
+  }
+
   function handleFileChange(e) {
     file.current = e.target.files[0]
   }
@@ -98,6 +102,15 @@ export default function Note() {
     }
 
     setIsDeleting(true)
+
+    try {
+      await deleteNote()
+      history.push('/')
+      // delete attachment
+    } catch (e) {
+      onError(e)
+      setIsDeleting(false)
+    }
   }
 
   return (
