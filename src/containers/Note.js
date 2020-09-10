@@ -1,10 +1,11 @@
 import React, { useRef, useState, useEffect } from "react";
 import { useParams, useHistory } from "react-router-dom";
 import { API, Storage } from "aws-amplify";
+import { Form } from "react-bootstrap";
 import { onError } from "../libs/errorLib";
 import config from "../config"
-import { Form } from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
+import { s3Upload } from "../libs/awsLib";
 import "./Note.css"
 
 export default function Note() {
@@ -29,7 +30,7 @@ export default function Note() {
         if (attachment) {
           note.attachmentURL = await Storage.vault.get(attachment)
         }
-        
+
         setContent(content)
         setNote(note)
       } catch (e) {
@@ -48,6 +49,12 @@ export default function Note() {
     return str.replace(/^\w+-/, "")
   }
 
+  function saveNote(note) {
+    return API.put("notes", `/notes/${id}`, {
+      body: note
+    })
+  }
+
   function handleFileChange(e) {
     file.current = e.target.files[0]
   }
@@ -63,6 +70,22 @@ export default function Note() {
     }
 
     setIsLoading(true)
+
+    try {
+      if (file.current) {
+        attachment = await s3Upload(file.current)
+        // delete old file
+      }
+      await saveNote({
+        content,
+        attachment: attachment || note.attachment
+      })
+      history.push('/')
+    } catch (e) {
+      onError(e)
+      setIsLoading(false)
+    }
+
   }
 
   async function handleDelete(e) {
@@ -92,13 +115,13 @@ export default function Note() {
             <Form.Group>
               <Form.Label>Attachment</Form.Label>
               <Form.Text>
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href={note.attachmentURL}
-              >
-                {formatFilename(note.attachment)}
-              </a>
+                <a
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href={note.attachmentURL}
+                >
+                  {formatFilename(note.attachment)}
+                </a>
               </Form.Text>
             </Form.Group>
           )}
