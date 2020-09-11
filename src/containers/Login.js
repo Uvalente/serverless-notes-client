@@ -4,13 +4,11 @@ import { Auth } from "aws-amplify";
 import { useAppContext } from "../libs/contextLib";
 import { onError } from "../libs/errorLib"
 import { useFormFields } from "../libs/hookLib"
-import { useHistory } from 'react-router-dom'
 import LoaderButton from "../components/LoaderButton";
 import "./Login.css";
 
 export default function Login() {
   const { userHasAuthenticated } = useAppContext();
-  const history = useHistory()
 
   const [isLoading, setIsLoading] = useState(false)
     const [fields, handleFieldChange] = useFormFields({
@@ -30,7 +28,6 @@ export default function Login() {
       await Auth.signIn(fields.email, fields.password)
       alert("Logged in")
       userHasAuthenticated(true);
-      history.push('/')
     } catch (e) {
       onError(e)
       setIsLoading(false)
